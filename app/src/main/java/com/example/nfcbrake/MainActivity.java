@@ -46,8 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<AppInfo> apps;
+        updateMainLayout(recyclerView);
+    }
 
+    private void updateMainLayout(RecyclerView recyclerView) {
+
+        List<AppInfo> apps;
         try {
             apps = getAppInfo();
         } catch (PackageManager.NameNotFoundException e) {
@@ -173,5 +177,13 @@ public class MainActivity extends AppCompatActivity {
             requestPermission(this);
             Toast.makeText(this, "Grant the necessary permission", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        updateMainLayout(recyclerView);
     }
 }
