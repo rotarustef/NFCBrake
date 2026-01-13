@@ -1,0 +1,76 @@
+package com.example.nfcbrake;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
+
+    private final List<AppInfo> appInfo;
+
+    public AppAdapter(List<AppInfo> apps) {
+        this.appInfo = apps;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView name;
+        private final ImageView icon;
+
+        private final TextView printTime;
+        private final ProgressBar progress;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.appName);
+            icon = itemView.findViewById(R.id.appIcon);
+            printTime = itemView.findViewById(R.id.printTime);
+            progress = itemView.findViewById(R.id.progressBar);
+        }
+
+        public TextView getText() {
+            return name;
+        }
+
+        public ImageView getIcon() {
+            return icon;
+        }
+
+        public TextView getTime() {
+            return printTime;
+        }
+
+        public ProgressBar getProgress() {
+            return progress;
+        }
+    }
+
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.text_row_item, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.getText().setText(appInfo.get(position).name);
+        viewHolder.getIcon().setImageDrawable(appInfo.get(position).appIcon);
+        viewHolder.getTime().setText(appInfo.get(position).printTime);
+        viewHolder.getProgress().setProgress(appInfo.get(position).progressBar);
+    }
+
+    @Override
+    public int getItemCount() {
+        return appInfo.size();
+    }
+}
