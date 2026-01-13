@@ -32,7 +32,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.appName);
             icon = itemView.findViewById(R.id.appIcon);
             printTime = itemView.findViewById(R.id.printTime);
-            progress = itemView.findViewById(R.id.progressBar);
+            progress = itemView.findViewById(R.id.progressBarTotal);
         }
 
         public TextView getText() {

@@ -14,9 +14,7 @@ public class AppInfo {
         this.appIcon = appIcon;
         this.timeMillis = timeMillis;
         this.printTime = millisTimeBeautifier(timeMillis);
-        // progressBar (app time) / 24h
-        double appMinutes = (double) this.timeMillis / 1000 / 60;
-        this.progressBar = (int)(appMinutes / (60 * 24) * 100);;
+        this.progressBar = getProgress(this.timeMillis);
     }
 
     public long getTimeMillis(){
@@ -39,5 +37,11 @@ public class AppInfo {
         } else {
             return "1 day+";
         }
+    }
+
+    // progressBar (app time) / 24h
+    public static int getProgress(long timeMillis){
+        double appMinutes = (double) timeMillis / 1000 / 60;
+        return (int)(appMinutes / (60 * 24) * 100);
     }
 }

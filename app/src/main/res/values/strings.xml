@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NFCBrake</string>
+    <string name="icon_app_name">App Icon</string>
+    <string name="text_total_time">Total time spent this day</string>
 </resources>

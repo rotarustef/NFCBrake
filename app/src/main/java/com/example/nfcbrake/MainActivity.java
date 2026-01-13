@@ -10,7 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -56,6 +57,17 @@ public class MainActivity extends AppCompatActivity {
         AppAdapter adapter = new AppAdapter(apps);
         recyclerView.setAdapter(adapter);
 
+        TextView totalTime = findViewById(R.id.totalTime);
+        ProgressBar totalProgress = findViewById(R.id.progressBarTotal);
+
+        long totalTimeElapsed = 0;
+
+        for ( AppInfo app: apps){
+            totalTimeElapsed += app.getTimeMillis();
+        }
+
+        totalTime.setText(AppInfo.millisTimeBeautifier(totalTimeElapsed));
+        totalProgress.setProgress(AppInfo.getProgress(totalTimeElapsed));
     }
 
     public void requestPermission(Context context){
