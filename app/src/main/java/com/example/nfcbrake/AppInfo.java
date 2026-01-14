@@ -3,35 +3,46 @@ package com.example.nfcbrake;
 import android.graphics.drawable.Drawable;
 
 public class AppInfo {
-    public String name;
-    public Drawable appIcon;
-    public long timeMillis;
-    public String printTime;
-    public int progressBar;
+    private final String name;
+    private final Drawable appIcon;
+    private final long timeMillis;
+    private final String printTime;
 
-    public AppInfo(String name, Drawable appIcon, long timeMillis){
+    public AppInfo(String name, Drawable appIcon, long timeMillis) {
         this.name = name;
         this.appIcon = appIcon;
         this.timeMillis = timeMillis;
         this.printTime = millisTimeBeautifier(timeMillis);
-        this.progressBar = getProgress(this.timeMillis);
     }
 
-    public long getTimeMillis(){
+    public String getName() {
+        return this.name;
+    }
+
+    public Drawable getAppIcon() {
+        return this.appIcon;
+    }
+
+    public long getTimeMillis() {
         return this.timeMillis;
     }
-    public static String millisTimeBeautifier(long time){
+
+    public String getStringTime() {
+        return this.printTime;
+    }
+
+    public static String millisTimeBeautifier(long time) {
         long timeMinutes = time / 1000 / 60;
 
         if (timeMinutes == 0)
-            return time / 1000  + "sec";
+            return time / 1000 + "sec";
 
-        if (timeMinutes <= 60 * 24){
-            if(timeMinutes < 60)
+        if (timeMinutes <= 60 * 24) {
+            if (timeMinutes < 60)
                 return timeMinutes + "min";
             else {
-                long hour =  timeMinutes / 60;
-                long  min =  timeMinutes  % 60;
+                long hour = timeMinutes / 60;
+                long min = timeMinutes % 60;
                 return hour + "h " + min + "min";
             }
         } else {
@@ -40,8 +51,8 @@ public class AppInfo {
     }
 
     // progressBar (app time) / 24h
-    public static int getProgress(long timeMillis){
+    public static int getProgress(long timeMillis) {
         double appMinutes = (double) timeMillis / 1000 / 60;
-        return (int)(appMinutes / (60 * 24) * 100);
+        return (int) (appMinutes / (60 * 24) * 100);
     }
 }

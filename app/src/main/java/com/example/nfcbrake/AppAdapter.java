@@ -15,9 +15,17 @@ import java.util.List;
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private final List<AppInfo> appInfo;
+    private final long totaUsageMillis;
 
     public AppAdapter(List<AppInfo> apps) {
         this.appInfo = apps;
+
+        long sumUsage = 0L;
+        for (AppInfo app : appInfo) {
+            sumUsage += app.getTimeMillis();
+        }
+
+        this.totaUsageMillis = sumUsage;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,6 +60,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         }
     }
 
+    public long getTotaUsageMillis() {
+        return totaUsageMillis;
+    }
+
 
     @NonNull
     @Override
@@ -63,10 +75,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.getText().setText(appInfo.get(position).name);
-        viewHolder.getIcon().setImageDrawable(appInfo.get(position).appIcon);
-        viewHolder.getTime().setText(appInfo.get(position).printTime);
-        viewHolder.getProgress().setProgress(appInfo.get(position).progressBar);
+        viewHolder.getText().setText(appInfo.get(position).getName());
+        viewHolder.getIcon().setImageDrawable(appInfo.get(position).getAppIcon());
+        viewHolder.getTime().setText(appInfo.get(position).getStringTime());
+        viewHolder.getProgress().setProgress((int) (100.0 * appInfo.get(position).getTimeMillis() / totaUsageMillis));
     }
 
     @Override

@@ -64,27 +64,21 @@ public class MainActivity extends AppCompatActivity {
         TextView totalTime = findViewById(R.id.totalTime);
         ProgressBar totalProgress = findViewById(R.id.progressBarTotal);
 
-        long totalTimeElapsed = 0;
-
-        for ( AppInfo app: apps){
-            totalTimeElapsed += app.getTimeMillis();
-        }
-
-        totalTime.setText(AppInfo.millisTimeBeautifier(totalTimeElapsed));
-        totalProgress.setProgress(AppInfo.getProgress(totalTimeElapsed));
+        totalTime.setText(AppInfo.millisTimeBeautifier(adapter.getTotaUsageMillis()));
+        totalProgress.setProgress(AppInfo.getProgress(adapter.getTotaUsageMillis()));
     }
 
-    public void requestPermission(Context context){
+    public void requestPermission(Context context) {
         Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
         context.startActivity(intent);
     }
+
     public boolean isUsageAccessGranted() {
         UsageStatsManager check = (UsageStatsManager) this.getSystemService(USAGE_STATS_SERVICE);
 
         List<UsageStats> checkList = check.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, System.currentTimeMillis() - 1000 * 3600 * 24, System.currentTimeMillis());
         return !checkList.isEmpty();
     }
-
 
 
     public List<AppInfo> getAppInfo() throws PackageManager.NameNotFoundException {
@@ -102,19 +96,19 @@ public class MainActivity extends AppCompatActivity {
         UsageEvents events = usm.queryEvents(startDay, now);
 
         UsageEvents.Event event = new UsageEvents.Event();
-        while (events.hasNextEvent()){
+        while (events.hasNextEvent()) {
             events.getNextEvent(event);
 
             String pkgName = event.getPackageName();
             long eventTime = event.getTimeStamp();
             Integer foregroundCounter;
 
-            switch(event.getEventType()){
+            switch (event.getEventType()) {
 
                 case UsageEvents.Event.ACTIVITY_RESUMED:
                     foregroundCounter = activeApps.get(pkgName);
 
-                    if(foregroundCounter == null){
+                    if (foregroundCounter == null) {
                         activeApps.put(pkgName, 1);
                         foregroundApps.put(pkgName, eventTime);
                     } else {
@@ -124,17 +118,17 @@ public class MainActivity extends AppCompatActivity {
 
                 case UsageEvents.Event.ACTIVITY_PAUSED:
                     foregroundCounter = activeApps.get(pkgName);
-                    if(foregroundCounter == null)
+                    if (foregroundCounter == null)
                         break;
 
                     if (foregroundCounter == 1) {
-                    activeApps.remove(pkgName);
+                        activeApps.remove(pkgName);
 
-                    Long startTimeOfApp = foregroundApps.remove(pkgName);
-                    if (startTimeOfApp != null) {
-                        long delta = eventTime - startTimeOfApp;
-                        totalTime.merge(pkgName, delta, Long::sum);
-                    }
+                        Long startTimeOfApp = foregroundApps.remove(pkgName);
+                        if (startTimeOfApp != null) {
+                            long delta = eventTime - startTimeOfApp;
+                            totalTime.merge(pkgName, delta, Long::sum);
+                        }
                     } else {
                         activeApps.put(pkgName, foregroundCounter - 1);
                     }
@@ -160,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             if (pm.getLaunchIntentForPackage(pkgName) == null)
                 continue;
 
-            ApplicationInfo ai = pm.getApplicationInfo(pkgName,0);
+            ApplicationInfo ai = pm.getApplicationInfo(pkgName, 0);
             String appName = pm.getApplicationLabel(ai).toString();
 
             Drawable appIcon = getPackageManager().getApplicationIcon(pkgName);
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
