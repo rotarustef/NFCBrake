@@ -156,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
         for (Map.Entry<String, Long> e : totalTime.entrySet()) {
             String pkgName = e.getKey();
 
+            // filter system apps that are not accessible by the user
+            if (pm.getLaunchIntentForPackage(pkgName) == null)
+                continue;
+
             ApplicationInfo ai = pm.getApplicationInfo(pkgName,0);
             String appName = pm.getApplicationLabel(ai).toString();
 
